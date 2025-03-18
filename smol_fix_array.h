@@ -14,8 +14,8 @@
 
 typedef struct {
   void *data;
-  size_t capacity;
   size_t size;
+  size_t capacity;
 } smol_fix_array;
 
 smol_fix_array *smol_fix_array_create(size_t size, size_t capacity);
@@ -34,17 +34,19 @@ smol_fix_array *smol_fix_array_create(size_t size, size_t capacity) {
   if (array != NULL) {
     array->data = malloc(size * capacity);
     array->size = size;
+    array->capacity = capacity;
   }
 
   if (array->data == NULL) {
     free(array);
+    return NULL;
   }
 
   return array;
 }
 
 void *smol_fix_array_get(smol_fix_array *array, size_t index) {
-  if (array->capacity > index) {
+  if (index < array->capacity || index >= 0) {
     return (void *)((char *)(array->data) + (array->size * index));
   } else {
     return NULL;
@@ -52,8 +54,8 @@ void *smol_fix_array_get(smol_fix_array *array, size_t index) {
 }
 
 void smol_fix_array_set(smol_fix_array *array, void *value, size_t index) {
-  if (array->capacity > index) {
-    void *array_ptr = smol_fix_array_get(array, index);
+  void *array_ptr = smol_fix_array_get(array, index);
+  if (array_ptr != NULL) {
     memcpy(array_ptr, value, array->size);
   }
 }
