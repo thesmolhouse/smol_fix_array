@@ -10,16 +10,16 @@ It's only for study, but if you can use it, use it.
 
 typedef struct {
   char value;
-} Content;
+} Character;
 
-Content buffer;
+Character buffer;
 
 int main() {
   size_t size = 26;
-  size_t size_of_value = sizeof(Content);
+  size_t size_of_value = sizeof(Character);
 
   // Create
-  smol_fix_array *array = smol_fix_array_create(sizeof(Content), size);
+  smol_fix_array *array = smol_fix_array_init(sizeof(Character), size);
 
   for (int i = 0; i < size; i++) {
     buffer.value = 65 + i;
@@ -29,8 +29,8 @@ int main() {
 
   for (int i = 0; i < size; i++) {
     // Get
-    buffer = *(Content *)smol_fix_array_get(array, i);
-    printf("array[%2d] = {%c}\n", i, buffer.value);
+    buffer = *(Character *)smol_fix_array_get(array, i);
+    printf("array[%02d] = {%c}\n", i, buffer.value);
   }
 
   // Free
